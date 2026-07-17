@@ -10,7 +10,7 @@ def set_auth_cookies(response: Response, access_token: str, refresh_token: str) 
         value=access_token,
         httponly=True,                                        # JS cannot read this
         secure=True,                                          # HTTPS only (set False for local dev)
-        samesite="lax",                                       # lax = safe for most SPAs; strict = stricter
+        samesite="none",                                      # cross-domain: Vercel frontend, Railway backend
         max_age=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
         path="/",
     )
@@ -20,7 +20,7 @@ def set_auth_cookies(response: Response, access_token: str, refresh_token: str) 
         value=refresh_token,
         httponly=True,
         secure=True,
-        samesite="lax",
+        samesite="none",
         max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 24 * 60 * 60,
         path="/api/auth",                                     # narrower path — only sent to refresh endpoint
     )

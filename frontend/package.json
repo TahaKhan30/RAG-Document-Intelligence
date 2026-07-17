@@ -1,5 +1,5 @@
 {
-  "name": "jwt-auth-starter-frontend",
+  "name": "rag-document-intelligence-frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -8,14 +8,14 @@
     "start": "next start"
   },
   "dependencies": {
-    "next": "14.2.18",
-    "react": "^18",
-    "react-dom": "^18"
+    "next": "^16.2.10",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
   },
   "devDependencies": {
     "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10",
     "postcss": "^8",
     "tailwindcss": "^3",

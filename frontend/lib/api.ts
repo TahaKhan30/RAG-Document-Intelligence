@@ -60,3 +60,128 @@ export async function refreshTokens(): Promise<boolean> {
   const res = await apiFetch("/api/auth/refresh", { method: "POST" });
   return res.ok;
 }
+
+// ── Documents ─────────────────────────────────────────────────────────────
+
+export interface Document {
+  id: number;
+  filename: string;
+  title: string;
+  page_count: number;
+  word_count: number;
+  chunk_count: number;
+  status: string;
+  error_message: string | null;
+  uploaded_at: string;
+  indexed_at: string | null;
+}
+
+export interface DocumentStatus {
+  id: number;
+  status: string;
+  chunk_count: number;
+  error_message: string | null;
+}
+
+export async function uploadDocument(file: File): Promise<Document> {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  // No Content-Type header here — the browser sets the multipart boundary itself
+  const res = await fetch(`${API_URL}/api/documents`, {
+    method: "POST",
+    credentials: "include",
+    body: formData,
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: "Upload failed" }));
+    throw new Error(err.detail);
+  }
+  return res.json();
+}
+
+export async function listDocuments(): Promise<Document[]> {
+  const res = await apiFetch("/api/documents");
+  if (!res.ok) throw new Error("Failed to load documents");
+  return res.json();
+}
+
+export async function getDocument(id: number): Promise<Document> {
+  const res = await apiFetch(`/api/documents/${id}`);
+  if (!res.ok) throw new Error("Failed to load document");
+  return res.json();
+}
+
+export async function getDocumentStatus(id: number): Promise<DocumentStatus> {
+  const res = await apiFetch(`/api/documents/${id}/status`);
+  if (!res.ok) throw new Error("Failed to load document status");
+  return res.json();
+}
+
+export async function deleteDocument(id: number): Promise<void> {
+  const res = await apiFetch(`/api/documents/${id}`, { method: "DELETE" });
+  if (!res.ok) throw new Error("Failed to delete document");
+}
+
+export async function getSummary(documentId: number): Promise<{ summary: string }> {
+  const res = await apiFetch(`/api/documents/${documentId}/summary`);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: "Failed to summarize" }));
+    throw new Error(err.detail);
+  }
+  return res.json();
+}
+
+// ── Chat ──────────────────────────────────────────────────────────────────
+
+export interface CitedChunk {
+  chunk_id: number;
+  page_number: number;
+  section_heading: string | null;
+  document_id: number;
+  document_title: string;
+}
+
+export interface ChatMessage {
+  role: string;
+  content: string;
+  cited_chunks: CitedChunk[] | null;
+}
+
+export async function getChatHistory(documentId: number): Promise<ChatMessage[]> {
+  const res = await apiFetch(`/api/documents/${documentId}/chat`);
+  if (!res.ok) throw new Error("Failed to load chat history");
+  return res.json();
+}
+
+export async function askQuestion(documentId: number, question: string): Promise<{ answer: string; cited_chunks: CitedChunk[] }> {
+  const res = await apiFetch(`/api/documents/${documentId}/chat`, {
+    method: "POST",
+    body: JSON.stringify({ question }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: "Failed to get an answer" }));
+    throw new Error(err.detail);
+  }
+  return res.json();
+}
+
+// ── Search ────────────────────────────────────────────────────────────────
+
+export interface SearchResult {
+  chunk_id: number;
+  content: string;
+  page_number: number;
+  section_heading: string | null;
+  document_id: number;
+  document_title: string;
+}
+
+export async function searchDocuments(query: string): Promise<{ results: SearchResult[] }> {
+  const res = await apiFetch("/api/search", {
+    method: "POST",
+    body: JSON.stringify({ query }),
+  });
+  if (!res.ok) throw new Error("Search failed");
+  return res.json();
+}

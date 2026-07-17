@@ -1,4 +1,7 @@
+from pathlib import Path
 from pydantic_settings import BaseSettings
+
+BACKEND_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 class Settings(BaseSettings):
@@ -24,7 +27,7 @@ class Settings(BaseSettings):
     TOP_K: int = 5
 
     class Config:
-        env_file = ".env"
+        env_file = BACKEND_DIR / ".env"
 
 
 settings = Settings()

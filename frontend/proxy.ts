@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 const PUBLIC_ROUTES = ["/login", "/register"];
 const PROTECTED_PREFIX = ["/dashboard"];
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Check for the access token cookie (HttpOnly — set by FastAPI, readable server-side here)
@@ -30,7 +30,7 @@ export const config = {
 };
 
 /*
-  NOTE: This middleware only checks if the cookie EXISTS — not if it's valid.
+  NOTE: This proxy only checks if the cookie EXISTS — not if it's valid.
   A tampered or expired token will pass here but fail at the FastAPI endpoint.
   Real security lives in FastAPI's get_current_user dependency.
   This is purely UX — preventing the flash of the wrong page.

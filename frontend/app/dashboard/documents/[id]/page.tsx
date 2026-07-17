@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, use } from "react";
 import Link from "next/link";
 import { getDocument, getChatHistory, askQuestion, getSummary, Document, ChatMessage } from "@/lib/api";
 
-export default function DocumentChatPage({ params }: { params: { id: string } }) {
-  const docId = Number(params.id);
+export default function DocumentChatPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
+  const docId = Number(id);
   const [doc, setDoc] = useState<Document | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [question, setQuestion] = useState("");
