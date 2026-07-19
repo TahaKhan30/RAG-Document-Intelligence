@@ -62,6 +62,4 @@ The embedding provider is isolated in one service file. Swapping Voyage for Open
 - Support Word docs and plain text, not just PDF
 - Track citation-match rate as a retrieval quality metric
 
-## Running locally
 
-See `docs/CLAUDE_CODE_PROMPT.md` for full setup instructions.
