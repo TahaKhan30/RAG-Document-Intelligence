@@ -2,7 +2,7 @@
 
 Upload any PDF, then ask questions in plain English and get answers grounded in the document, with citations to the exact page. Built with a production RAG (Retrieval-Augmented Generation) pipeline.
 
-**Live demo:** _(add your Vercel URL here)_
+
 
 
 
