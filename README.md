@@ -4,7 +4,7 @@ Upload any PDF, then ask questions in plain English and get answers grounded in 
 
 **Live demo:** _(add your Vercel URL here)_
 
-![screenshot](docs/screenshot.png) _(add a screenshot or GIF here — it's the first thing recruiters see)_
+
 
 ## What it does
 
